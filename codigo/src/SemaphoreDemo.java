@@ -13,7 +13,7 @@ public class SemaphoreDemo {
         MyThread mt1 = new MyThread(sem, "A");
         MyThread mt2 = new MyThread(sem, "B");
 
-        // stating threads A and B
+        // começa threads A e B
         mt1.start();
         mt2.start();
 
@@ -21,8 +21,5 @@ public class SemaphoreDemo {
         mt1.join();
         mt2.join();
 
-        // count will always remain 0 after
-        // both threads will complete their execution
-        System.out.println("count: " + Shared.count);
     }
 }

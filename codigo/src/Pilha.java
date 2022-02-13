@@ -9,23 +9,27 @@ public class Pilha {
         novo.setAnt(top);
         top = novo;
     }
-    //Método de desempilhar
-    public String Desempilha() throws EmptyStackException{
+    // verifica se a pilha esta vazia
+    public int verifica(){
+        int vazio;
         if(top == null){
-            throw new EmptyStackException("A pilha está vazia");
+            vazio = 0;
+        }else {
+            vazio = 1;
         }
-        else{
+        return vazio;
+    }
+    //Método de desempilhar
+    public String Desempilha(){
+
             String valor = top.getDado();
             top = top.getAnt();
             return valor;
-        }
+
     }
     //Método para exibir pilha
-    public ArrayList<String> Exibir() throws EmptyStackException{
-        if(top == null){
-            throw new EmptyStackException("A pilha está vazia");
-        }
-        else{
+    public ArrayList<String> Exibir(){
+
             ArrayList<String> exibir = new ArrayList<String>();
             Noh aux = top;
             while(aux != null){
@@ -33,7 +37,7 @@ public class Pilha {
                 aux = aux.getAnt();
             }
             return exibir;
-        }
+
     }
 }
 

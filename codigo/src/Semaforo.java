@@ -1,12 +1,13 @@
 
 // java program to demonstrate
 // use of semaphores Locks
+import java.util.Random;
 import java.util.concurrent.*;
 
 //A shared resource/class.
 class Shared
 {
-    static int count = 0;
+    static Pilha pilha = new Pilha();
 }
 
 class MyThread extends Thread
@@ -22,74 +23,59 @@ class MyThread extends Thread
 
     @Override
     public void run() {
+        Random gerador = new Random();
+        int juiz, numero, count = 0;
+        while(count < 5) {
+            //gera numero aleatorio de 0 até 99
+            juiz = gerador.nextInt(100);
 
-        // run by thread A
-        if(this.getName().equals("A"))
-        {
-            System.out.println("Starting " + threadName);
-            try
-            {
-                // First, get a permit.
-                System.out.println(threadName + " is waiting for a permit.");
+            // se o numero gerado for par um numero é colocado na pilha
+            // se o numero for impar um numero é tirado da pilha
+            try {
+                System.out.println("Iniciando... " + threadName);
 
-                // acquiring the lock
+                System.out.println(threadName + " esta esperando por permissao.");
+                // O primeiro consegue permissao
                 sem.acquire();
 
-                System.out.println(threadName + " gets a permit.");
+                System.out.println(threadName + " conseguiu permissao.");
+                // verifica se a pilha esta vazia
+                // se estiver vazia muda variavel para par
+                if (Shared.pilha.verifica() == 0) {
+                    System.out.println("pilha vazia!!!");
+                    juiz = 2;
 
-                // Now, accessing the shared resource.
-                // other waiting threads will wait, until this
-                // thread release the lock
-                for(int i=0; i < 5; i++)
+                }
+
+                if (juiz % 2 == 0)//numero gerado é par
                 {
-                    Shared.count++;
-                    System.out.println(threadName + ": " + Shared.count);
+                    numero = gerador.nextInt(100);
+                    // chama a funcao de empilhar da pilha
+                    Shared.pilha.Empilha(String.valueOf(numero));
+                    // printa numero empilhado
+                    System.out.println(threadName + " empilhou: " + numero);
 
-                    // Now, allowing a context switch -- if possible.
-                    // for thread B to execute
-                    Thread.sleep(10);
+                } else    //numero gerado é impar
+                {
+                    String dado;
+                    // desempilha
+                    dado = Shared.pilha.Desempilha();
+                    // printa numero desempilhado
+                    System.out.println(threadName + " desempilhou: " + dado);
                 }
             } catch (InterruptedException exc) {
                 System.out.println(exc);
             }
-
-            // Release the permit.
-            System.out.println(threadName + " releases the permit.");
+            // libera a permissao.
+            System.out.println(threadName + " liberou permissao.");
             sem.release();
-        }
-
-        // run by thread B
-        else
-        {
-            System.out.println("Starting " + threadName);
-            try
-            {
-                // First, get a permit.
-                System.out.println(threadName + " is waiting for a permit.");
-
-                // acquiring the lock
-                sem.acquire();
-
-                System.out.println(threadName + " gets a permit.");
-
-                // Now, accessing the shared resource.
-                // other waiting threads will wait, until this
-                // thread release the lock
-                for(int i=0; i < 5; i++)
-                {
-                    Shared.count--;
-                    System.out.println(threadName + ": " + Shared.count);
-
-                    // Now, allowing a context switch -- if possible.
-                    // for thread A to execute
-                    Thread.sleep(10);
-                }
-            } catch (InterruptedException exc) {
-                System.out.println(exc);
+            System.out.println(Shared.pilha.Exibir());
+            try {
+                Thread.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            // Release the permit.
-            System.out.println(threadName + " releases the permit.");
-            sem.release();
+            count ++;
         }
     }
 }
