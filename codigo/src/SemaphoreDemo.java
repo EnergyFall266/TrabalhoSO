@@ -10,16 +10,16 @@ public class SemaphoreDemo {
         // creating two threads with name A and B
         // Note that thread A will increment the count
         // and thread B will decrement the count
-        MyThread mt1 = new MyThread(sem, "A");
-        MyThread mt2 = new MyThread(sem, "B");
+        MyThread thread1 = new MyThread(sem, "A");
+        MyThread thread2 = new MyThread(sem, "B");
 
         // começa threads A e B
-        mt1.start();
-        mt2.start();
+        thread1.start();
+        thread2.start();
 
         // waiting for threads A and B
-        mt1.join();
-        mt2.join();
+        thread1.join();
+        thread2.join();
 
     }
 }

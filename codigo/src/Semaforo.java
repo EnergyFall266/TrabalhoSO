@@ -66,7 +66,7 @@ class MyThread extends Thread
             } catch (InterruptedException exc) {
                 System.out.println(exc);
             }
-            // libera a permissao.
+             //libera a permissao.
             System.out.println(threadName + " liberou permissao.");
             sem.release();
             System.out.println(Shared.pilha.Exibir());
